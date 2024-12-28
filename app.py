@@ -18,7 +18,8 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-groq_api_key = os.environ.get("GROQ_API_KEY")
+groq_api_key = os.environ.get("API_KEY")
+print("API_KEY",groq_api_key)
 model = "llama3-8b-8192"
 client = ChatGroq(groq_api_key=groq_api_key, model_name=model)
 system_prompt = ( 

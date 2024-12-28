@@ -1,5 +1,6 @@
 Flask
 Streamlit
+flask_cors
 requests
 numpy
 pandas
