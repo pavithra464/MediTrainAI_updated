@@ -20,6 +20,15 @@ client = Groq(
     timeout=30  # Set a custom timeout (in seconds)
 )
 
+def get_users():
+    url = "https://api.freeapi.app/api/v1/public/randomusers?page=1&limit=10"
+    response = requests.get(url, timeout=20)
+    if response.status_code==200:
+        return response.json()
+    else:
+        return{"error":f"Failed to fetch users: {response.status_code}"}
+   
+
 
 def get_response(text):
     try:
@@ -38,8 +47,8 @@ def get_response(text):
             ],
             model="llama3-8b-8192",
         )
-        print(f"Chat completion response: {chat_completion}")  # Log the response
         return chat_completion.choices[0].message.content
+    
     except Exception as e:
         print(f"Error in get_response: {str(e)}")
         raise
@@ -59,19 +68,15 @@ def response():
         data = request.get_json()
         if not data or 'query' not in data:
             return jsonify({"error": "Missing 'query' in the request body"}), 400
-        
+        query = data.get("query")
+        print(query)
+        response = get_response(query)
         # Mock response instead of calling Groq API
-        return jsonify({"response": "This is a mock response. Groq API call would be here."})
+        return jsonify({"response": response})
+        # return jsonify({"response": "This is a mock response. Groq API call would be here."})
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({"error": "An error occurred while processing your request"}), 500
-
-
-
-def get_users():
-    url = "https://api.freeapi.app/api/v1/public/randomusers?page=1&limit=10"
-    response = requests.get(url)
-    return response.json()
 
 
 @app.route("/test_users", methods=["GET"])
