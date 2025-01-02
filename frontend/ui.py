@@ -1,5 +1,11 @@
 import streamlit as st
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+backend_url=os.environ.get("BACKEND_URL")
 
 
 # Set up the Streamlit app
